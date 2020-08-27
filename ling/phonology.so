@@ -1,0 +1,59 @@
+load "vector.so";
+
+static Phonology class {
+	getNaturalSet(ref phones, ref set) => {
+		var m = [];
+		p in set do {
+			m += mat p;
+		}
+		return m from phones;
+	}
+
+	isNaturalSet(ref phones, ref set) => {
+		var ns = getNaturalSet(phones, set);
+		return length(ns) == length(set);
+	}
+
+	findNaturalSets(ref phones, ref set, ref explored) => {
+		explored == null then {
+			explored = {};
+		}
+		explored += { set };
+		var ns = {};
+		isNaturalSet(phones, set) then {
+			ns += { set };
+		}
+		length(set) > 2 then {
+			i in {0 until length(set)} do {
+				var nv = set;
+				nv.remove(i);
+				explored.contains(nv) == false then {
+					var s = findNaturalSets(phones, nv, explored);
+					length(s) > 0 then {
+						ns += s;
+					}
+				}
+			}
+		}
+		return ns;
+	}
+
+	naturalize(ref phones, ref set) => {
+		var natural = (ref phones, ref matrix) => {
+			var list = {};
+			i in {0 until length(matrix)} do {
+				var temp = mat (vec matrix).remove(i);
+				(temp from phones) == (matrix from phones) then {
+					list += natural(phones, temp);
+					break;
+				}
+			}
+			length(list) == 0 then {
+				return { matrix };
+			} else {
+				refer list;
+			}
+		}
+		return natural(phones, com(getNaturalSet(phones, set)))[0];
+	}
+}

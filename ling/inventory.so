@@ -1,0 +1,51 @@
+load "vector.so";
+load "phonology.so";
+load "rule.so";
+
+struct Inventory class {
+	var name;
+	var phonemes = {};
+	var rules = {};
+
+	init(final name) => {
+		this.name = name;
+	}
+
+	addPhoneme(final phoneme) => {
+		type(phoneme) != "Phone" then {
+			throw "Cannot insert non-Phone value.";
+		}
+		phonemes.contains(final phoneme) == false then {
+			this.phonemes += { phoneme };
+		}
+	}
+
+	addRule(final rule) => {
+		type(phoneme) != "Rule" then {
+			throw "Cannot insert non-Rule value.";
+		}
+		rules.contains(rule) == false then {
+			this.rules += { rule };
+		}
+	}
+
+	transform(final words) => {
+		return words.apply(rules);
+	}
+
+	getSet(ref matrix) => {
+		return matrix from phonemes;
+	}
+
+	getNaturalSet(ref phones) => {
+		return Phonology.getNaturalSet(this.phonemes, phones);
+	}
+
+	isNaturalSet(ref phones) => {
+		return Phonology.isNaturalSet(this.phonemes, phones);
+	}
+
+	getString() => {
+		return this.name;
+	}
+}
