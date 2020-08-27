@@ -1,6 +1,5 @@
 load "vector.so";
 load "phonology.so";
-load "rule.so";
 
 struct Inventory class {
 	var name;

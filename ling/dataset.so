@@ -2,7 +2,6 @@ load "file.so";
 load "map.so";
 load "string.so";
 load "vector.so";
-load "rule.so";
 
 struct DataSet class {
 	var categories;

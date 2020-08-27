@@ -29,31 +29,3 @@ static RuleSets class {
 		stopDeletion
 	};
 }
-
-Vector::apply(ref this, ref ruleset) => {
-	var applied = {};
-	e in this do {
-		type(ruleset) == "Vector" then {
-			var temp = e;
-			r in ruleset do {
-				temp >>= r;
-			}
-			applied += { temp };
-		} else {
-			applied += {e >> ruleset};
-		}
-	}
-	return applied;
-}
-
-Word::apply(ref this, ref ruleset) => {
-	var applied = this;
-	type(ruleset) == "Vector" then {
-		r in ruleset do {
-			applied >>= r;
-		}
-	} else {
-		applied >>= ruleset;
-	}
-	return applied;
-}
